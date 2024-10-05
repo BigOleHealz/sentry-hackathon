@@ -1,0 +1,63 @@
+Table "Services_Offered" {
+  "_id" BINARY(16) [pk, not null, default: `UUID_TO_BIN(UUID())`]
+  "ServiceName" VARCHAR(255)
+  "Description" TEXT
+}
+
+Table "Restaurants" {
+  "_id" BINARY(16) [pk, not null, default: `UUID_TO_BIN(UUID())`]
+  "Email" VARCHAR(255)
+  "Link" VARCHAR(255) [unique]
+  "TipNoTip" BOOLEAN
+  "About" TEXT
+}
+
+Table "RestaurantImages" {
+  "_id" BINARY(16) [pk, not null, default: `UUID_TO_BIN(UUID())`]
+  "Restaurant_id" BINARY(16) [not null]
+  "ImageLink" VARCHAR(255)
+}
+
+Table "Contractors" {
+  "_id" BINARY(16) [pk, not null, default: `UUID_TO_BIN(UUID())`]
+  "Email" VARCHAR(255)
+  "PortfolioLink" VARCHAR(255)
+  "Bio" TEXT
+}
+
+Table "ContractorServices" {
+  "Contractor_id" BINARY(16) [not null]
+  "Service_id" BINARY(16) [not null]
+
+  Indexes {
+    (Contractor_id, Service_id) [pk]
+  }
+}
+
+Table "Listings" {
+  "_id" BINARY(16) [pk, not null, default: `UUID_TO_BIN(UUID())`]
+  "RestaurantLink" VARCHAR(255) [not null]
+  "Description" TEXT
+  "Fulfilled" BOOLEAN
+}
+
+Table "ListingServices" {
+  "Listing_id" BINARY(16) [not null]
+  "Service_id" BINARY(16) [not null]
+
+  Indexes {
+    (Listing_id, Service_id) [pk]
+  }
+}
+
+Ref:"Restaurants"."_id" < "RestaurantImages"."Restaurant_id"
+
+Ref:"Contractors"."_id" < "ContractorServices"."Contractor_id"
+
+Ref:"Services_Offered"."_id" < "ContractorServices"."Service_id"
+
+Ref:"Restaurants"."Link" < "Listings"."RestaurantLink"
+
+Ref:"Listings"."_id" < "ListingServices"."Listing_id"
+
+Ref:"Services_Offered"."_id" < "ListingServices"."Service_id"
