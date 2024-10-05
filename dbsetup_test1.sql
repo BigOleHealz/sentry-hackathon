@@ -13,14 +13,6 @@ VALUES
   (UUID_TO_BIN(UUID()), 'contact@restaurantB.com', 'restaurant-b', FALSE, 'Casual dining with an extensive selection of burgers and craft beers.'),
   (UUID_TO_BIN(UUID()), 'reservations@restaurantC.com', 'restaurant-c', TRUE, 'A family-owned Italian restaurant offering a variety of pastas and pizzas.');
 
--- insert into restaurants images
-INSERT INTO RestaurantImages (_id, Restaurant_id, ImageLink)
-VALUES
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID()), 'https://example.com/images/restaurantA_1.jpg'),
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID()), 'https://example.com/images/restaurantA_2.jpg'),
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID()), 'https://example.com/images/restaurantB_1.jpg'),
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID()), 'https://example.com/images/restaurantC_1.jpg');
-
 -- insert into contractors
 INSERT INTO Contractors (_id, Email, PortfolioLink, Bio)
 VALUES
@@ -32,10 +24,22 @@ VALUES
 -- insert into ContractorServices (connect Contractors and Services_offered)
 INSERT INTO ContractorServices (Contractor_id, Service_id)
 VALUES
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID())),  -- Link contractor1 to Interior Design service
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID())),  -- Link contractor2 to Catering service
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID())),  -- Link contractor3 to Photography service
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID()));  -- Link contractor4 to Marketing service
+  (
+    (SELECT _id FROM Contractors WHERE Email = 'contractor1@example.com' LIMIT 1), 
+    (SELECT _id FROM Services_Offered WHERE ServiceName = 'Interior Design' LIMIT 1)
+  ),
+  (
+    (SELECT _id FROM Contractors WHERE Email = 'contractor2@example.com' LIMIT 1), 
+    (SELECT _id FROM Services_Offered WHERE ServiceName = 'Catering' LIMIT 1)
+  ),
+  (
+    (SELECT _id FROM Contractors WHERE Email = 'contractor3@example.com' LIMIT 1), 
+    (SELECT _id FROM Services_Offered WHERE ServiceName = 'Photography' LIMIT 1)
+  ),
+  (
+    (SELECT _id FROM Contractors WHERE Email = 'contractor4@example.com' LIMIT 1), 
+    (SELECT _id FROM Services_Offered WHERE ServiceName = 'Marketing' LIMIT 1)
+  );
 
 -- insert into listing
 INSERT INTO Listings (_id, RestaurantLink, Description, Fulfilled)
@@ -47,6 +51,17 @@ VALUES
 -- ListingServices (connect listing posts with services_offered)
 INSERT INTO ListingServices (Listing_id, Service_id)
 VALUES
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID())),  -- Link listing1 to Catering service
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID())),  -- Link listing2 to Photography service
-  (UUID_TO_BIN(UUID()), UUID_TO_BIN(UUID()));  -- Link listing3 to Interior Design service
+  (
+    (SELECT _id FROM Listings WHERE Description = 'Need catering services for a private event' LIMIT 1),
+    (SELECT _id FROM Services_Offered WHERE ServiceName = 'Catering' LIMIT 1)
+  ),
+  (
+    (SELECT _id FROM Listings WHERE Description = 'Looking for a photographer to capture new menu items' LIMIT 1),
+    (SELECT _id FROM Services_Offered WHERE ServiceName = 'Photography' LIMIT 1)
+  ),
+  (
+    (SELECT _id FROM Listings WHERE Description = 'Require interior design update for the dining area' LIMIT 1),
+    (SELECT _id FROM Services_Offered WHERE ServiceName = 'Interior Design' LIMIT 1)
+  );
+
+  
