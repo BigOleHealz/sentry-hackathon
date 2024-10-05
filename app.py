@@ -13,6 +13,12 @@ def update_service(service_id):
     if service_id not in services:
         return jsonify({"error": "Service not found"}), 404
 
+    if not request.is_json:
+        return jsonify({
+            "error": "Unsupported Media Type",
+            "message": "Request Content-Type must be 'application/json'"
+        }), 415
+
     data = request.json
     if not data:
         return jsonify({"error": "No input data provided"}), 400
@@ -29,6 +35,10 @@ def update_service(service_id):
         "message": "Service updated successfully",
         "service": service
     }), 200
+
+@app.route('/getservices', methods=['GET'])
+def get_all_services():
+    return jsonify(services), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
