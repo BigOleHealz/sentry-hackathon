@@ -9,7 +9,7 @@ services = {
     2: {"id": 2, "name": "Service B", "description": "Description for Service B"}
 }
 
-@app.route('/getservices/<int:service_id>', methods=['GET'])
+@app.route('/api/getservices/<int:service_id>', methods=['GET'])
 def update_service(service_id):
     if service_id not in services:
         return jsonify({"error": "Service not found"}), 404
@@ -37,10 +37,14 @@ def update_service(service_id):
         "service": service
     }), 200
 
-@app.route('/getservices', methods=['GET'])
+@app.route('/api/getservices', methods=['GET'])
 def get_all_services():
     return jsonify(services), 200
 
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({"message": "Welcome to the service management API"}), 200
+
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get('PORT', 5006))
+    app.run(debug=True)
