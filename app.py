@@ -9,7 +9,7 @@ services = {
     2: {"id": 2, "name": "Service B", "description": "Description for Service B"}
 }
 
-@app.route('/getservices/<int:service_id>', methods=['GET'])
+@app.route('/api/getservices/<int:service_id>', methods=['GET'])
 def update_service(service_id):
     if service_id not in services:
         return jsonify({"error": "Service not found"}), 404
@@ -37,7 +37,7 @@ def update_service(service_id):
         "service": service
     }), 200
 
-@app.route('/getservices', methods=['GET'])
+@app.route('/api/getservices', methods=['GET'])
 def get_all_services():
     return jsonify(services), 200
 
