@@ -41,6 +41,10 @@ def update_service(service_id):
 def get_all_services():
     return jsonify(services), 200
 
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({"message": "Welcome to the service management API"}), 200
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
