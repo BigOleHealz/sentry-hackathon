@@ -15,7 +15,7 @@ SET foreign_key_checks = 1;
 
 -- Create the Services_Offered table
 CREATE TABLE Services_Offered (
-  _id BINARY(16) NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
+  _id BINARY(16) NOT NULL,
   ServiceName VARCHAR(255),
   Description TEXT,
   PRIMARY KEY (_id)
@@ -23,7 +23,7 @@ CREATE TABLE Services_Offered (
 
 -- Create the Restaurants table
 CREATE TABLE Restaurants (
-  _id BINARY(16) NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
+  _id BINARY(16) NOT NULL,
   Email VARCHAR(255),
   Link VARCHAR(255) UNIQUE,
   TipNoTip BOOLEAN,
@@ -33,7 +33,7 @@ CREATE TABLE Restaurants (
 
 -- Create the RestaurantImages table to store list of image links
 CREATE TABLE RestaurantImages (
-  _id BINARY(16) NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
+  _id BINARY(16) NOT NULL,
   Restaurant_id BINARY(16) NOT NULL,
   ImageLink VARCHAR(255),
   PRIMARY KEY (_id),
@@ -42,7 +42,7 @@ CREATE TABLE RestaurantImages (
 
 -- Create the Contractors table
 CREATE TABLE Contractors (
-  _id BINARY(16) NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
+  _id BINARY(16) NOT NULL,
   Email VARCHAR(255),
   PortfolioLink VARCHAR(255),
   Bio TEXT,
@@ -60,7 +60,7 @@ CREATE TABLE ContractorServices (
 
 -- Create the Listings table
 CREATE TABLE Listings (
-  _id BINARY(16) NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
+  _id BINARY(16) NOT NULL,
   RestaurantLink VARCHAR(255) NOT NULL,
   Description TEXT,
   Fulfilled BOOLEAN,
