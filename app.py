@@ -5,8 +5,6 @@ import pymysql
 
 
 
-
-
 def connect_to_rds():
     try:
         # Get the RDS endpoint
