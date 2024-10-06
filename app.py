@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, jsonify
 import boto3
-import pymysql
+import pymysql, json
 
 
 
@@ -116,6 +116,45 @@ def getcontractors():
             sql_connection.close()
             print("Connection closed")
     
+@app.route('/api/getlistings', methods=['GET'])
+def get_all_listings():
+    # Return
+    keys = ['id', 'restaurant_link', 'description', ]
+    sql_connection = connect_to_rds()
+    if sql_connection:
+        try:
+            with sql_connection.cursor() as cursor:
+                # Example: Execute a simple query
+                cursor.execute("SELECT * FROM Listings")
+                result = [{"id":record[0],"restaurant_link": record[1], "description": record[2], "fulfilled": record[3]} for record in cursor.fetchall()]
+                return jsonify(result), 200
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            return jsonify({"error": "An error occurred while fetching listings"}), 500
+        finally:
+            sql_connection.close()
+            print("Connection closed")
+    
+@app.route('/api/getlistingServices', methods=['GET'])
+def get_all_listing_services():
+    # Return
+    keys = ['id', 'restaurant_link', 'description', ]
+    sql_connection = connect_to_rds()
+    if sql_connection:
+        try:
+            with sql_connection.cursor() as cursor:
+                # Example: Execute a simple query
+                cursor.execute("SELECT * FROM ListingsWithServices")
+                result = [{"listing_id":record[0],"restaurant_link": record[1], "description": record[2], "fulfilled": record[3], "Services_requested": json.loads(record[4])} for record in cursor.fetchall()]
+                return jsonify(result), 200
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            return jsonify({"error": "An error occurred while fetching listings"}), 500
+        finally:
+            sql_connection.close()
+            print("Connection closed")
+
+
 
 @app.route('/', methods=['GET'])
 def home():
