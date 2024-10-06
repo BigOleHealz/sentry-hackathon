@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, jsonify
 import boto3
 import pymysql, json
+from uuid import uuid4
 
 
 
@@ -153,6 +154,26 @@ def get_all_listing_services():
         finally:
             sql_connection.close()
             print("Connection closed")
+
+
+@app.route("/api/createContractor", methods=['POST'])
+def create_contractor():
+    data = request.get_json()
+    
+   
+    try:
+        sql_connection  = connect_to_rds()
+        if sql_connection:
+            uuid_ = uuid4()
+            cursor = sql_connection.cursor()
+            query = "INSERT INTO Contractors (_id, email, portfoliolink, bio) VALUES (%s, %s, %s, %s)"
+            values = (uuid_ ,data['email'], data['portfolio_link'], data['bio'])
+            cursor.execute(query, values)
+            sql_connection.commit()
+            return {"id" : uuid_, "email" : data['email'], "portfolio_link":data['portfolio_link'],"bio": data['bio'] }, 202
+    finally:
+        sql_connection.close()
+
 
 
 
