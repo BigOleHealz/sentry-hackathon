@@ -32,7 +32,7 @@ def main():
             with connection.cursor() as cursor:
                 # Example: Execute a simple query
                 cursor.execute("SELECT * FROM Restaurants")
-                result = cursor.fetchall()
+                result = [{"_id": record[0], "Email": record[1]} for record in cursor.fetchall()]
                 print(f"Database version: {result}")
                 print("Successfully connected to RDS!")
         finally:
@@ -85,7 +85,7 @@ def get_all_services():
             with sql_connection.cursor() as cursor:
                 # Example: Execute a simple query
                 cursor.execute("SELECT * FROM Restaurants")
-                result = [list(row) for row in cursor.fetchall()]
+                result = [{"_id": record[0], "Email": record[1], "Link": record[2], "TipNoTip": record[3], "About": record[4]} for record in cursor.fetchall()]
                 print(f"Database version: {result}")
                 return jsonify(result), 200
         except Exception as e:
