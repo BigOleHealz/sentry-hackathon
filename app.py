@@ -86,8 +86,6 @@ def get_all_services():
         try:
             with sql_connection.cursor() as cursor:
                 # Example: Execute a simple query
-                import pdb; pdb.set_trace()
-                
                 cursor.execute("SELECT * FROM Restaurants")
                 result = [list(row) for row in cursor.fetchall()]
                 print(f"Database version: {result}")
