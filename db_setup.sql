@@ -15,7 +15,7 @@ SET foreign_key_checks = 1;
 
 -- Create the Services_Offered table
 CREATE TABLE Services_Offered (
-  _id BINARY(16) NOT NULL,
+  _id CHAR(36) NOT NULL,
   ServiceName VARCHAR(255),
   Description TEXT,
   PRIMARY KEY (_id)
@@ -23,7 +23,7 @@ CREATE TABLE Services_Offered (
 
 -- Create the Restaurants table
 CREATE TABLE Restaurants (
-  _id BINARY(16) NOT NULL,
+  _id CHAR(36) NOT NULL,
   Email VARCHAR(255),
   Link VARCHAR(255) UNIQUE,
   TipNoTip BOOLEAN,
@@ -33,8 +33,8 @@ CREATE TABLE Restaurants (
 
 -- Create the RestaurantImages table to store list of image links
 CREATE TABLE RestaurantImages (
-  _id BINARY(16) NOT NULL,
-  Restaurant_id BINARY(16) NOT NULL,
+  _id CHAR(36) NOT NULL,
+  Restaurant_id CHAR(36) NOT NULL,
   ImageLink VARCHAR(255),
   PRIMARY KEY (_id),
   FOREIGN KEY (Restaurant_id) REFERENCES Restaurants(_id)
@@ -42,7 +42,7 @@ CREATE TABLE RestaurantImages (
 
 -- Create the Contractors table
 CREATE TABLE Contractors (
-  _id BINARY(16) NOT NULL,
+  _id CHAR(36) NOT NULL,
   Email VARCHAR(255),
   PortfolioLink VARCHAR(255),
   Bio TEXT,
@@ -51,8 +51,8 @@ CREATE TABLE Contractors (
 
 -- Junction table for Contractors and Services_Offered (many-to-many relationship)
 CREATE TABLE ContractorServices (
-  Contractor_id BINARY(16) NOT NULL,
-  Service_id BINARY(16) NOT NULL,
+  Contractor_id CHAR(36) NOT NULL,
+  Service_id CHAR(36) NOT NULL,
   PRIMARY KEY (Contractor_id, Service_id),
   FOREIGN KEY (Contractor_id) REFERENCES Contractors(_id),
   FOREIGN KEY (Service_id) REFERENCES Services_Offered(_id)
@@ -60,7 +60,7 @@ CREATE TABLE ContractorServices (
 
 -- Create the Listings table
 CREATE TABLE Listings (
-  _id BINARY(16) NOT NULL,
+  _id CHAR(36) NOT NULL,
   RestaurantLink VARCHAR(255) NOT NULL,
   Description TEXT,
   Fulfilled BOOLEAN,
@@ -70,8 +70,8 @@ CREATE TABLE Listings (
 
 -- Junction table for Listings and Services_Offered (many-to-many relationship)
 CREATE TABLE ListingServices (
-  Listing_id BINARY(16) NOT NULL,
-  Service_id BINARY(16) NOT NULL,
+  Listing_id CHAR(36) NOT NULL,
+  Service_id CHAR(36) NOT NULL,
   PRIMARY KEY (Listing_id, Service_id),
   FOREIGN KEY (Listing_id) REFERENCES Listings(_id),
   FOREIGN KEY (Service_id) REFERENCES Services_Offered(_id)
