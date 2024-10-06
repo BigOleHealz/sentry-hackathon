@@ -177,6 +177,54 @@ def create_contractor():
 
 
 
+@app.route('/api/putrestaurant', methods=['POST'])
+def put_restaurant():
+    # Parse the JSON data from the request body
+    data = request.get_json()
+
+    # Extract the parameters from the JSON body
+    _id = str(uuid4())
+    email = data.get('email')
+    link = data.get('link')
+    tip_no_tip = data.get('tip_no_tip')
+    about = data.get('about')
+
+    # Check if the required fields are provided
+    if not email or not link or tip_no_tip is None or not about:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        # Establish a connection to the database
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            # Check if the restaurant already exists by the given _id
+            cursor.execute("SELECT _id FROM Restaurants WHERE _id = %s", (id,))
+            restaurant = cursor.fetchone()
+
+            if restaurant:
+                # If the restaurant exists, update its information
+                sql_update_query = """
+                UPDATE Restaurants
+                SET Email = %s, Link = %s, TipNoTip = %s, About = %s
+                WHERE _id = %s
+                """
+                cursor.execute(sql_update_query, (email, link, tip_no_tip, about, id))
+                connection.commit()
+                return jsonify({"message": "Restaurant updated successfully"}), 200
+            else:
+                # If the restaurant doesn't exist, insert a new record
+                sql_insert_query = """
+                INSERT INTO Restaurants (_id, Email, Link, TipNoTip, About)
+                VALUES (%s, %s, %s, %s, %s)
+                """
+                cursor.execute(sql_insert_query, (id, email, link, tip_no_tip, about))
+                connection.commit()
+                return jsonify({"message": "Restaurant created successfully"}), 201
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error" : str(e)})
+
+
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({"message": "Welcome to the service management API"}), 200
