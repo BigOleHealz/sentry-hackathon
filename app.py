@@ -86,8 +86,29 @@ def get_all_services():
         try:
             with sql_connection.cursor() as cursor:
                 # Example: Execute a simple query
+                import pdb; pdb.set_trace()
+                
                 cursor.execute("SELECT * FROM Restaurants")
-                result = cursor.fetchall()
+                result = [list(row) for row in cursor.fetchall()]
+                print(f"Database version: {result}")
+                return jsonify(result), 200
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            return jsonify({"error": "An error occurred while fetching services"}), 500
+        finally:
+            sql_connection.close()
+            print("Connection closed")
+
+@app.route('/api/getcontractors', methods=['GET'])
+def getcontractors():
+    # Return
+    sql_connection = connect_to_rds()
+    if sql_connection:
+        try:
+            with sql_connection.cursor() as cursor:
+                # Example: Execute a simple query
+                cursor.execute("SELECT * FROM Contractors")
+                result = [{"Email": record[1], "Portfolio": record[2], "Bio": record[3]} for record in cursor.fetchall()]
                 print(f"Database version: {result}")
                 return jsonify(result), 200
         except Exception as e:
