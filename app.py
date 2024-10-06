@@ -193,7 +193,7 @@ def put_restaurant():
 
     try:
         # Establish a connection to the database
-        connection = get_db_connection()
+        connection = connect_to_rds()
         with connection.cursor() as cursor:
             # Check if the restaurant already exists by the given _id
             cursor.execute("SELECT _id FROM Restaurants WHERE _id = %s", (id,))
